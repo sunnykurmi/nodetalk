@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="shortcut icon"
+      href="/images/favicon-32x32.png"
+      type="image/x-icon"
+    />
+    <title>NodeTalk</title>
+  </head>
+  <body>
+    <div
+      class="w-full flex justify-center items-center h-[100vh] bg-[url('https://images.unsplash.com/photo-1528459801416-a9e53bbf4e17?q=80&w=1912&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')]"
+    >
+      <div
+        class="w-[60%] bg-[#f4fbfdb7] flex items-center justify-center rounded-2xl shadow-lg max-[600px]:w-full max-[600px]:mt-[-20vh]"
+      >
+        <form
+          action="/login"
+          method="post"
+          class="flex flex-col p-10 w-[50%] rounded-lg max-[600px]:w-full"
+        >
+          <h1 class="text-3xl font-bold text-center text-[#6D61FF] mb-5">
+            Login
+          </h1>
+          <h3 class="text-1xl font-semibold text-center mb-5 text-[#5e5e5e]">
+            Please fill the details to login your account
+          </h3>
+          <input
+            type="text"
+            name="username"
+            placeholder="Username"
+            class="p-2 mb-5 rounded-full border outline-none pl-5 border-gray-300"
+          />
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            class="p-2 mb-5 rounded-full outline-none pl-5 border border-gray-300"
+          />
+          <div class="flex items-center justify-center gap-7">
+            <button
+              type="submit"
+              class="bg-[#6D61FF] text-white p-2 w-32 rounded-full"
+            >
+              Login
+            </button>
+
+            <a
+              href="/signup"
+              class="bg-[#ffffffa7] border-2 font-bold border-[#6D61FF] text-[#6D61FF] flex items-center justify-center p-2 w-32 rounded-full"
+              >Sign Up</a
+            >
+          </div>
+        </form>
+      </div>
+    </div>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </body>
+</html>

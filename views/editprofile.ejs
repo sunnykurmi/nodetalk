@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NodeTalk</title>
+    <link rel="shortcut icon" href="../images/logo.png" type="image/x-icon" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../stylesheets/style.css" />
+  </head>
+  <body>
+    <a class="text-2xl text-black absolute left-5 top-5" href="/">
+      <i class="ri-arrow-left-line"></i> back</a
+    >
+    <div class="h-[100vh] w-full flex items-center justify-center">
+      <div
+        class="w-[20%] h-[80%] flex flex-col items-center justify-center max-[600px]:w-[70%]"
+      >
+        <div class="w-32 h-32 relative border-2 rounded-full p-1">
+          <img
+            class="h-full w-full object-cover rounded-full"
+            src="<%=loggedinuser.avatar.url%>"
+            alt=""
+          />
+          <form
+            action="/uploadavatar"
+            method="post"
+            enctype="multipart/form-data"
+          >
+            <input class="hidden" type="file" name="avatar" />
+          </form>
+          <i
+            class="ri-pencil-line absolute rounded-full flex items-center bottom-2 justify-center bg-[#FFAB00] h-7 w-7 right-0 text-xl z-10"
+          ></i>
+        </div>
+        <div class="h-96 w-full mt-10">
+          <form action="/update" method="post">
+            <h1>Name</h1>
+            <input
+              type="text"
+              name="name"
+              placeholder="full name"
+              value="<%=loggedinuser.name%>"
+              class="w-full h-10 p-2 mb-5 rounded-full outline-none pl-5 border border-gray-300"
+            />
+            <h1>Username</h1>
+
+            <input
+              type="text"
+              name="username"
+              placeholder="username"
+              value="<%=loggedinuser.username%>"
+              class="w-full h-10 p-2 mb-5 rounded-full outline-none pl-5 border border-gray-300"
+            />
+            <h1>Email</h1>
+
+            <input
+              type="email"
+              name="email"
+              placeholder="email"
+              value="<%=loggedinuser.email%>"
+              class="w-full h-10 p-2 mb-5 rounded-full outline-none pl-5 border border-gray-300"
+            />
+
+            <div class="w-full flex items-center justify-between">
+              <button
+                type="submit"
+                class="bg-[#FFAB00] text-white p-2 w-32 rounded-full"
+              >
+                Update
+              </button>
+              <a
+                href="/logout"
+                class="border-2 flex items-center justify-center border-[#FFAB00] text-[#FFAB00] p-2 w-32 rounded-full"
+              >
+                Logout
+              </a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      document
+        .querySelector(".ri-pencil-line")
+        .addEventListener("click", () => {
+          document.querySelector("input[type=file]").click();
+        });
+      document
+        .querySelector("input[type=file]")
+        .addEventListener("change", () => {
+          document.querySelector("form").submit();
+        });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NodeTalk</title>
+    <link rel="shortcut icon" href="../images/logo.png" type="image/x-icon" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../stylesheets/style.css" />
+  </head>
+  <body>
+    <div
+      class="w-full h-[100vh] p-5 flex justify-between bg-[#F6F6F6] max-[600px]:flex-col max-[600px]:p-0 max-[600px]:overflow-y-hidden overflow-x-hidden"
+    >
+      <div class="w-[29%] h-full max-[600px]:w-full max-[600px]:h-fit">
+        <div
+          class="w-full h-20 rounded-2xl flex items-center justify-evenly bg-white"
+        >
+          <div class="h-16 w-16">
+            <img
+              class="h-full w-full object-cover"
+              src="../images/logo.png"
+              alt=""
+            />
+          </div>
+          <div
+            class="h-12 w-56 rounded-full text-xl flex items-center justify-center text-[#FFAB00] border-2"
+          >
+            <input
+              class="w-36 outline-none"
+              id="searchInput"
+              placeholder="Search"
+              type="text"
+            />
+            <i class="ri-search-line"></i>
+          </div>
+          <a href="/editprofile">
+            <div
+              class="h-12 w-12 border-2 overflow-hidden rounded-full bg-white"
+            >
+              <img
+                class="h-full w-full object-cover"
+                src="<%=loggedinuser.avatar.url%>"
+                alt=""
+              />
+            </div>
+          </a>
+        </div>
+        <div
+          class="w-full h-[88%] pt-5 flex flex-col items-center bg-white mt-2 rounded-2xl max-[600px]:flex-row max-[600px]:h-[7vh] max-[600px]:justify-start max-[600px]:pl-5 max-[600px]:pt-2 max-[600px]:items-start"
+        >
+          <% allusers.forEach(function(user){%>
+          <div
+            id="messagewala"
+            class="username h-16 flex p-2 items-center justify-evenly w-[90%] border-b-2 max-[600px]:w-fit max-[600px]:gap-3"
+            onclick="createMessageElement('<%=loggedinuser.id%>','<%=user._id%>','<%= user.avatar.url %>', '<%= user.username %>', '<%= user.name %>','<%=user.status%>')"
+            data-id="<%=user._id%>"
+            data-img="<%=user.avatar.url%>"
+          >
+            <div class="h-14 w-14 relative">
+              <% if(user.status ==="1"){%>
+              <div
+                class="h-3 w-3 absolute bottom-2 right-1 border-2 border-white bg-green-500 rounded-full"
+              ></div>
+              <%}%>
+
+              <img
+                class="h-full w-full rounded-full object-cover"
+                src="<%=user.avatar.url%>"
+                alt=""
+              />
+            </div>
+            <div class="w-[70%] h-ful max-[600px]:hidden">
+              <p class="text-lg font-semibold"><%=user.name%></p>
+              <!-- <p class="text-xs font-semibold text-gray-400">Last messge</p> -->
+            </div>
+            <div class="">
+              <i
+                class="ri-message-3-line text-3xl text-[#FFAB00] max-[600px]:hidden"
+              ></i>
+              <!-- <p class="text-xs text-slate-500">12:02 am</p> -->
+            </div>
+          </div>
+          <%}) %>
+        </div>
+      </div>
+      <div
+        id="background"
+        class="w-[70.5%] h-full bg-no-repeat bg-cover bg-[url('https://i.pinimg.com/originals/bb/f5/fd/bbf5fd9d83afd98ff698ef63b7568f0d.gif')] max-[600px]:w-full"
+      ></div>
+      <div id="messagebox" class="hidden w-[70.5%] h-full max-[600px]:w-full">
+        <div
+          id="messageboxnav"
+          class="messageboxnav max-[600px]:ml-2 max-[600px]:mt-5"
+        ></div>
+
+        <div
+          id="messagecontainer"
+          class="messagecontainer w-full h-[78%] pb-5 overflow-scroll pt-5 bg-white mt-2 rounded-2xl max-[600px]:h-[75%] overflow-x-hidden"
+        ></div>
+        <div class="w-full flex gap-2 h-16 mt-2">
+          <div
+            class="w-[84%] h-full rounded-2xl overflow-hidden bg-white max-[600px]:w-[70%]"
+          >
+            <form action="" id="chatform">
+              <input
+                type="text"
+                name=""
+                class="h-16 pl-4 w-full text-2xl outline-none"
+                id="chatinput"
+                placeholder="write messages ........"
+                oninput="checkInput()"
+              />
+              <input type="submit" value="" id="chatsubmit" disabled />
+            </form>
+            <input
+              class="hidden"
+              type="file"
+              name="image"
+              onchange="upload(this.files)"
+              id="imageinput"
+            />
+          </div>
+          <div
+            class="file w-[7%] h-full rounded-2xl flex items-center justify-center bg-[#ffaa00ce] max-[600px]:w-[15%]"
+          >
+            <i class="ri-attachment-2 text-white text-2xl"></i>
+          </div>
+          <div
+            id="send"
+            class="w-[7%] h-full rounded-2xl flex items-center justify-center bg-[#ffaa00ce] max-[600px]:w-[15%]"
+          >
+            <i class="ri-send-plane-fill text-white text-2xl"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script
+      src="https://code.jquery.com/jquery-3.6.4.js"
+      integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E="
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.js"
+      integrity="sha512-zoJXRvW2gC8Z0Xo3lBbao5+AS3g6YWr5ztKqaicua11xHo+AvE1b0lT9ODgrHTmNUxeCw0Ry4BGRYZfXu70weg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script>
+      var socket = io();
+      var receiverid;
+      var senderid = "<%=loggedinuser._id%>";
+      var socket = io({
+        auth: {
+          token: "<%=loggedinuser._id%>",
+        },
+      });
+      // Inside your client-side JavaScript code
+
+      // Update the upload function to send the image file via FormData
+      function upload(files) {
+        const formData = new FormData();
+        formData.append("senderid", "<%=loggedinuser._id%>");
+        formData.append("senderImage", "<%=loggedinuser.image%>");
+        formData.append("receiverid", receiverid);
+        formData.append("image", files[0]);
+        $.ajax({
+          url: "/chat2",
+          method: "POST",
+          processData: false,
+          contentType: false,
+          data: formData,
+          success: function (response) {
+            if (response.success) {
+              if (response.data.image && response.data.image.url) {
+                var newdiv = document.createElement("div");
+                const now = new Date();
+                const options = {
+                  timeZone: "Asia/Kolkata",
+                  hour12: true,
+                  hour: "numeric",
+                  minute: "numeric",
+                };
+                const istTime = now.toLocaleTimeString("en-US", options);
+
+                newdiv.innerHTML = `
+              <div>
+
+          <div class="w-full flex justify-end">
+              <div class="mr-5 mb-2">
+                <div class="h-60 w-60">
+                  <img
+                    class="w-full h-full object-cover"
+                    src="${response.data.image.url}"
+                    alt=""
+                  />
+                </div>
+              </div>
+            </div> 
+          <div class="w-full pr-6 text-xs flex justify-end">${istTime}</div>
+        </div>
+  
+                  `;
+                document.querySelector("#messagecontainer").appendChild(newdiv);
+                socket.emit("receiverimage", response.data);
+                document.getElementById("messagecontainer").scrollTop =
+                  messagecontainer.scrollHeight;
+              }
+            }
+          },
+          error: function (error) {
+            // Handle error
+          },
+        });
+      }
+      socket.on("loadreceiverimage", function (data) {
+        if (
+          senderid == data.message.receiverid &&
+          receiverid == data.message.senderid
+        ) {
+          var newdiv = document.createElement("div");
+          const now = new Date();
+          const options = {
+            timeZone: "Asia/Kolkata",
+            hour12: true,
+            hour: "numeric",
+            minute: "numeric",
+          };
+          const istTime = now.toLocaleTimeString("en-US", options);
+
+          newdiv.innerHTML = `
+        <div>
+          <div class="w-full flex justify-start">
+              <div class="flex gap-2 mb-2 ml-5 w-[100%]">
+                <div class="flex flex-col justify-end">
+                  <div class="h-14 w-14">
+                    <img
+                      class="h-full w-full object-cover"
+                      src=${data.senderImage}
+                      alt=""
+                    />
+                  </div>
+                </div>
+                <div class="h-60 w-60">
+                  <img
+                    class="w-full h-full object-cover"
+                    src="${data.message.image.url}"
+                    alt=""
+                  />
+                </div>
+              </div>
+            </div>
+          <div class="w-full ml-20 text-xs flex justify-start">${istTime}</div>
+        </div>
+
+            `;
+          document.querySelector("#messagecontainer").appendChild(newdiv);
+          document.getElementById("messagecontainer").scrollTop =
+            messagecontainer.scrollHeight;
+        }
+      });
+
+      document.querySelectorAll("#messagewala").forEach(function (dets) {
+        dets.addEventListener("click", function (e) {
+          receiverid = this.getAttribute("data-id"); // Using vanilla JavaScript to get data-id
+          receiveridimg = this.getAttribute("data-img"); // Using vanilla JavaScript to get data-id
+          handleReceiverIdChange(receiverid, receiveridimg);
+          $("#messagecontainer").html("");
+          socket.emit("existschat", {
+            senderid: "<%=loggedinuser._id%>",
+            receiverid: receiverid,
+          });
+        });
+      });
+
+      // Move these outside the handleReceiverIdChange function to avoid reattaching multiple listeners
+      document
+        .querySelector("#chatform")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+          var message = document.querySelector("#chatinput").value;
+
+          $.ajax({
+            url: "/chat",
+            method: "POST",
+            data: {
+              senderid: "<%=loggedinuser._id%>",
+              receiverid: receiverid,
+              senderImage: "<%=loggedinuser.avatar.url%>",
+              message: message,
+            },
+
+            success: function (response) {
+              if (response.success) {
+                document.querySelector("#chatinput").value = "";
+                if (response.data.message && response.data.message.message) {
+                  let chatid = response.data.message._id;
+                  let chatMessage = response.data.message.message;
+                  var newdiv = document.createElement("div");
+                  newdiv.id = "receiver";
+                  const now = new Date();
+                  const options = {
+                    timeZone: "Asia/Kolkata",
+                    hour12: true,
+                    hour: "numeric",
+                    minute: "numeric",
+                  };
+                  const istTime = now.toLocaleTimeString("en-US", options);
+
+                  newdiv.innerHTML = `
+                  <div class="">
+          <div class="w-full flex justify-end">
+            <div class="flex mr-5 justify-end mb-2 w-[100%]">
+              <div
+                class="rounded-t-3xl max-w-[80%] rounded-bl-3xl bg-[#ffaa00ce] p-3"
+              >
+                <p>${chatMessage}</p>
+              </div>
+            </div>
+          </div>
+          <div class="w-full pr-6 text-xs flex justify-end">${istTime}</div>
+        </div>
+                  `;
+                  document
+                    .querySelector("#messagecontainer")
+                    .appendChild(newdiv);
+                  document.getElementById("messagecontainer").scrollTop =
+                    messagecontainer.scrollHeight;
+                  socket.emit("receiverchat", response.data);
+                } else {
+                  console.log("Message not found in the response");
+                }
+              } else {
+                console.log("Error in response:", response.error);
+              }
+            },
+            error: function (error) {
+              console.log("Error:", error);
+            },
+          });
+        });
+
+      socket.on("loadreceiverchat", function (data) {
+        if (
+          senderid == data.message.receiverid &&
+          receiverid == data.message.senderid
+        ) {
+          var newdiv = document.createElement("div");
+          newdiv.id = "sender";
+          const now = new Date();
+          const options = {
+            timeZone: "Asia/Kolkata",
+            hour12: true,
+            hour: "numeric",
+            minute: "numeric",
+          };
+          const istTime = now.toLocaleTimeString("en-US", options);
+
+          newdiv.innerHTML = `
+          <div class="">
+          <div class="w-full flex justify-start">
+          <div class="flex gap-2 mb-2 ml-5 w-[100%]">
+            <div class="flex flex-col justify-end">
+              <div class="h-14 w-14">
+                <img
+                  class="h-full w-full rounded-full object-cover"
+                  src=${data.senderImage}
+                  alt=""
+                />
+              </div>
+            </div>
+            <div
+              class="rounded-t-3xl max-w-[80%] rounded-br-3xl bg-[#efefefb1] p-3"
+            >
+              <p>${data.message.message}</p>
+            </div>
+          </div>
+        </div>
+        <div class="w-full text-xs ml-20 flex justify-start">${istTime}</div>
+        </div>
+            `;
+          document.querySelector("#messagecontainer").appendChild(newdiv);
+          document.getElementById("messagecontainer").scrollTop =
+            messagecontainer.scrollHeight;
+        }
+      });
+      function createMessageElement(
+        loggedinuserid,
+        id,
+        image,
+        username,
+        name,
+        status
+      ) {
+        // Remove the existing element from messageboxnav
+        var existingElement =
+          document.getElementById("messageboxnav").firstChild;
+        if (existingElement) {
+          existingElement.remove();
+        }
+
+        // Create a new element
+        var newElement = document.createElement("div");
+        newElement.className = "messageboxnav"; // Add a class for styling if needed
+        // Set the inner HTML of the new element
+        newElement.innerHTML = `
+
+        <div
+        class="w-full h-20 rounded-2xl flex items-center justify-evenly bg-white"
+      >
+        <div class="h-16 flex pb-2 items-center w-full pl-5 gap-2">
+          <div class="h-14 w-14">
+            <img
+              class="h-full w-full rounded-full object-cover"
+              src=${image}
+              alt=""
+            />
+          </div>
+          <div class="w-[70%] h-ful">
+            <p class="text-lg font-semibold">${name}</p>
+            <h4>${
+              status === "1"
+                ? '<p class="text-xs font-semibold text-green-500">Online</p>'
+                : '<p class="text-xs font-semibold text-red-500">Offline</p> '
+            }</h4>
+          
+          </div>
+        </div>
+      </div>
+        
+              `;
+        // <a href="/call/${id}" id="messagenav-a" ><i class="ri-video-chat-fill"></i></a>
+        // Append the new element to the messageboxnav div
+        document.getElementById("messageboxnav").appendChild(newElement);
+        document.getElementById("messagecontainer").scrollTop =
+          messagecontainer.scrollHeight;
+      }
+      function handleReceiverIdChange(id, img) {
+        receiverid = id;
+        document.querySelector("#messagecontainer").innerHTML = "";
+
+        // Remove existing socket event listeners before adding new ones
+        socket.off("loadchats");
+
+        // Listen for the new chats for the specific receiver
+        socket.on("loadchats", function (data) {
+          var chats = data.chats;
+          let html = "";
+          chats.forEach(function (chat) {
+            if (
+              chat.message &&
+              chat.message.trim() !== "" &&
+              chat &&
+              chat.createdAt
+            ) {
+              // If chat contains a message
+              let addiv =
+                chat.senderid === "<%=loggedinuser._id%>"
+                  ? "receiver"
+                  : "sender";
+              const createdAtLocalString = new Date(
+                chat.createdAt
+              ).toLocaleTimeString("en-US", {
+                timeZone: "Asia/Kolkata",
+                hour12: true,
+                hour: "numeric",
+                minute: "numeric",
+              });
+              if (addiv === "receiver") {
+                html += `
+              <div>
+          <div class="w-full flex justify-end">
+            <div class="flex mr-5 justify-end mb-2 w-[100%]">
+              <div
+                class="rounded-t-3xl max-w-[80%] rounded-bl-3xl bg-[#ffaa00ce] p-3"
+              >
+                <p>${chat.message}</p>
+              </div>
+            </div>
+          </div>
+        <div class="w-full text-xs pr-6 flex justify-end">${createdAtLocalString}</div>
+      </div>
+
+        `;
+              } else {
+                html += `
+              <div>
+          <div class="w-full flex justify-start">
+            <div class="flex gap-2 mb-2 ml-5 w-[100%]">
+              <div class="flex flex-col justify-end">
+                <div class="h-14 w-14">
+                  <img
+                    class="h-full rounded-full w-full object-cover"
+                    src=${img}
+                    alt=""
+                  />
+                </div>
+              </div>
+              <div
+                class="rounded-t-3xl max-w-[80%] rounded-br-3xl bg-[#efefefb1] p-3"
+              >
+                <p>${chat.message}</p>
+              </div>
+            </div>
+          </div>
+        <div class="w-full text-xs pl-20 flex justify-start">${createdAtLocalString}</div>
+      </div>
+
+        `;
+              }
+            } else if (chat.image && chat.image.url.trim() !== "") {
+              // If chat contains an image
+              let addiv =
+                chat.senderid === "<%=loggedinuser._id%>"
+                  ? "receiver"
+                  : "sender";
+              const createdAtLocalString = new Date(
+                chat.createdAt
+              ).toLocaleTimeString("en-US", {
+                timeZone: "Asia/Kolkata",
+                hour12: true,
+                hour: "numeric",
+                minute: "numeric",
+              });
+              if (addiv === "receiver") {
+                html += `
+          <div>
+          <div class="w-full flex justify-end">
+            <div class="mr-5 mb-2">
+              <div class="h-60 w-60">
+                <img
+                  class="w-full h-full object-cover"
+                  src="${chat.image.url}"
+                  alt=""
+                />
+              </div>
+            </div>
+          </div>
+        <div class="w-full text-xs pr-6 flex justify-end">${createdAtLocalString}</div>
+      </div>
+
+          
+        `;
+              } else {
+                html += `
+          <div>
+          <div class="w-full flex justify-start">
+            <div class="flex gap-2 mb-2 ml-5 w-[100%]">
+              <div class="flex flex-col justify-end">
+                <div class="h-14 w-14">
+                  <img
+                    class="h-full rounded-full w-full object-cover"
+                    src=${img}
+                    alt=""
+                  />
+                </div>
+              </div>
+              <div class="h-60 w-60">
+                <img
+                  class="w-full h-full object-cover"
+                  src="${chat.image.url}"
+                  alt=""
+                />
+              </div>
+            </div>
+          </div>
+        <div class="w-full text-xs ml-20 flex justify-start">${createdAtLocalString}</div>
+      </div>
+
+        `;
+              }
+            }
+          });
+
+          $("#messagecontainer").append(html);
+          document.getElementById("messagecontainer").scrollTop =
+            messagecontainer.scrollHeight;
+        });
+      }
+      // document.querySelector("#heart").addEventListener("click", function () {
+      //   var chatInput = document.querySelector("#chatinput");
+      //   var currentHearts = chatInput.value.match(/❤️/g) || []; // Count current hearts
+      //   var newHearts = "❤️".repeat(currentHearts.length + 1); // Add one more heart
+      //   chatInput.value = newHearts;
+      //   checkInput();
+      // });
+
+      function checkInput() {
+        var inputValue = document.getElementById("chatinput").value;
+        var submitButton = document.getElementById("chatsubmit");
+        submitButton.disabled = inputValue.trim().length === 0;
+      }
+
+      // Register click event listener for the send button
+      document.querySelector("#send").addEventListener("click", function () {
+        // Simulate a click on the submit button when the send button is clicked
+        document.querySelector("#chatsubmit").click();
+      });
+
+      document.querySelectorAll("#messagewala").forEach(function (dets) {
+        dets.addEventListener("click", function () {
+          document.querySelector("#messagebox").style.display = "initial";
+          document.querySelector("#background").style.display = "none";
+        });
+      });
+
+      document.querySelector(".file").addEventListener("click", function () {
+        document.querySelector("#imageinput").click();
+      });
+
+      document
+        .getElementById("searchInput")
+        .addEventListener("input", function () {
+          const searchQuery = this.value.toLowerCase();
+          const userElements = document.querySelectorAll(".username");
+
+          userElements.forEach(function (userElement) {
+            const username = userElement.innerText.toLowerCase();
+
+            if (username.includes(searchQuery)) {
+              userElement.style.display = "flex";
+            } else {
+              userElement.style.display = "none";
+            }
+          });
+        });
+    </script>
+  </body>
+</html>
