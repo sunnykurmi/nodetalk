@@ -51,12 +51,12 @@
           </a>
         </div>
         <div
-          class="w-full h-[88%] pt-5 flex flex-col items-center bg-white mt-2 rounded-2xl max-[600px]:flex-row max-[600px]:h-[7vh] max-[600px]:justify-start max-[600px]:pl-5 max-[600px]:pt-2 max-[600px]:items-start"
+          class="w-full h-[88%] pt-5 flex flex-col items-center bg-[#ffffff] mt-2 rounded-2xl max-[600px]:flex-row max-[600px]:h-[10vh] max-[600px]:justify-start max-[600px]:pl-5 max-[600px]:pt-0 max-[600px]:items-start"
         >
           <% allusers.forEach(function(user){%>
           <div
             id="messagewala"
-            class="username h-16 flex p-2 items-center justify-evenly w-[90%] border-b-2 max-[600px]:w-fit max-[600px]:gap-3"
+            class="username h-16 flex p-2 items-center justify-evenly w-[90%] border-b-2 max-[600px]:w-fit max-[600px]:gap-3 max-[600px]:h-fit"
             onclick="createMessageElement('<%=loggedinuser.id%>','<%=user._id%>','<%= user.avatar.url %>', '<%= user.username %>', '<%= user.name %>','<%=user.status%>')"
             data-id="<%=user._id%>"
             data-img="<%=user.avatar.url%>"
@@ -92,17 +92,17 @@
         id="background"
         class="w-[70.5%] h-full bg-no-repeat bg-cover bg-[url('https://i.pinimg.com/originals/bb/f5/fd/bbf5fd9d83afd98ff698ef63b7568f0d.gif')] max-[600px]:w-full"
       ></div>
-      <div id="messagebox" class="hidden w-[70.5%] h-full max-[600px]:w-full">
+      <div id="messagebox" class="hidden w-[70.5%] h-full max-[600px]:w-full"  >
         <div
           id="messageboxnav"
-          class="messageboxnav max-[600px]:ml-2 max-[600px]:mt-5"
+          class="messageboxnav max-[600px]:ml-2 max-[600px]:mt-2"
         ></div>
 
         <div
           id="messagecontainer"
-          class="messagecontainer w-full h-[78%] pb-5 overflow-scroll pt-5 bg-white mt-2 rounded-2xl max-[600px]:h-[75%] overflow-x-hidden"
+          class="messagecontainer w-full h-[78%] pb-5 overflow-scroll pt-5 bg-white mt-2 rounded-2xl max-[600px]:h-[62%] overflow-x-hidden "
         ></div>
-        <div class="w-full flex gap-2 h-16 mt-2">
+        <div class="w-full flex gap-2 h-16 mt-2 max-[600px]:fixed max-[600px]:bottom-0 max-[600px]:bg-[white] ">
           <div
             class="w-[84%] h-full rounded-2xl overflow-hidden bg-white max-[600px]:w-[70%]"
           >
@@ -110,7 +110,7 @@
               <input
                 type="text"
                 name=""
-                class="h-16 pl-4 w-full text-2xl outline-none"
+                class=" h-16 pl-4 w-full text-2xl outline-none"
                 id="chatinput"
                 placeholder="write messages ........"
                 oninput="checkInput()"
@@ -126,13 +126,13 @@
             />
           </div>
           <div
-            class="file w-[7%] h-full rounded-2xl flex items-center justify-center bg-[#ffaa00ce] max-[600px]:w-[15%]"
+            class="file w-[7%] h-full rounded-2xl flex items-center justify-center bg-[#ffaa00ce] max-[600px]:w-[20%]"
           >
             <i class="ri-attachment-2 text-white text-2xl"></i>
           </div>
           <div
             id="send"
-            class="w-[7%] h-full rounded-2xl flex items-center justify-center bg-[#ffaa00ce] max-[600px]:w-[15%]"
+            class="w-[7%] h-full rounded-2xl flex items-center justify-center bg-[#ffaa00ce] max-[600px]:w-[20%]"
           >
             <i class="ri-send-plane-fill text-white text-2xl"></i>
           </div>
